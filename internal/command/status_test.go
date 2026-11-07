@@ -3,7 +3,7 @@ package command_test
 import (
 	"testing"
 
-	"github.com/ColinEge/8bd-kbd-api/internal/command"
+	"github.com/ColinEge/8bd-ultimate-api/internal/command"
 )
 
 func TestStatusResponse(t *testing.T) {

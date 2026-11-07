@@ -11,7 +11,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/ColinEge/8bd-kbd-api/client"
+	"github.com/ColinEge/8bd-ultimate-api/client"
 )
 
 func testStore(t *testing.T) *Store {

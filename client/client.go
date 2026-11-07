@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ColinEge/8bd-kbd-api/transport"
+	"github.com/ColinEge/8bd-ultimate-api/transport"
 	"github.com/google/gousb"
 )
 

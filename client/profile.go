@@ -7,7 +7,7 @@ import (
 	"unicode/utf16"
 	"unicode/utf8"
 
-	"github.com/ColinEge/8bd-kbd-api/internal/command"
+	"github.com/ColinEge/8bd-ultimate-api/internal/command"
 )
 
 // ValidateProfileName bounds names to the two observed 29-byte text packets.

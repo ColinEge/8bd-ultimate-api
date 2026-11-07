@@ -3,8 +3,8 @@ package command
 import (
 	"fmt"
 
-	"github.com/ColinEge/8bd-kbd-api/keydefs"
-	"github.com/ColinEge/8bd-kbd-api/protocol"
+	"github.com/ColinEge/8bd-ultimate-api/keydefs"
+	"github.com/ColinEge/8bd-ultimate-api/protocol"
 )
 
 // RemappedKeysResponse

@@ -1,6 +1,6 @@
 package command
 
-import "github.com/ColinEge/8bd-kbd-api/protocol"
+import "github.com/ColinEge/8bd-ultimate-api/protocol"
 
 // RecordMacro
 type RecordMacro struct {

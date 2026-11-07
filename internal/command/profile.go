@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"unicode/utf16"
 
-	"github.com/ColinEge/8bd-kbd-api/protocol"
+	"github.com/ColinEge/8bd-ultimate-api/protocol"
 )
 
 type ProfileResponse struct {

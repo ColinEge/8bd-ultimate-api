@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/ColinEge/8bd-kbd-api/protocol"
+	"github.com/ColinEge/8bd-ultimate-api/protocol"
 	"github.com/google/gousb"
 )
 

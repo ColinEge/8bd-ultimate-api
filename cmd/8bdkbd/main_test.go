@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ColinEge/8bd-kbd-api/client"
-	"github.com/ColinEge/8bd-kbd-api/test/fixtures/keyboard"
+	"github.com/ColinEge/8bd-ultimate-api/client"
+	"github.com/ColinEge/8bd-ultimate-api/test/fixtures/keyboard"
 )
 
 func TestRunRejectsInvalidArgumentsBeforeOpeningUSB(t *testing.T) {

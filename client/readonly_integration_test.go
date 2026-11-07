@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ColinEge/8bd-kbd-api/client"
-	"github.com/ColinEge/8bd-kbd-api/keydefs"
-	"github.com/ColinEge/8bd-kbd-api/transport"
+	"github.com/ColinEge/8bd-ultimate-api/client"
+	"github.com/ColinEge/8bd-ultimate-api/keydefs"
+	"github.com/ColinEge/8bd-ultimate-api/transport"
 	"github.com/google/gousb"
 )
 

@@ -5,10 +5,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/ColinEge/8bd-kbd-api/client"
+	"github.com/ColinEge/8bd-ultimate-api/client"
 	"github.com/cucumber/godog"
 
-	"github.com/ColinEge/8bd-kbd-api/test/fixtures/keyboard"
+	"github.com/ColinEge/8bd-ultimate-api/test/fixtures/keyboard"
 )
 
 type World struct {

@@ -3,7 +3,7 @@ package protocol
 import (
 	"fmt"
 
-	"github.com/ColinEge/8bd-kbd-api/keydefs"
+	"github.com/ColinEge/8bd-ultimate-api/keydefs"
 )
 
 // Packet size = 33 bytes

@@ -3,7 +3,7 @@ package command
 import (
 	"context"
 
-	"github.com/ColinEge/8bd-kbd-api/protocol"
+	"github.com/ColinEge/8bd-ultimate-api/protocol"
 )
 
 // Commands always start with 0x52

@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ColinEge/8bd-kbd-api/internal/command"
-	"github.com/ColinEge/8bd-kbd-api/keydefs"
-	"github.com/ColinEge/8bd-kbd-api/transport"
+	"github.com/ColinEge/8bd-ultimate-api/internal/command"
+	"github.com/ColinEge/8bd-ultimate-api/keydefs"
+	"github.com/ColinEge/8bd-ultimate-api/transport"
 )
 
 type keyboard struct {

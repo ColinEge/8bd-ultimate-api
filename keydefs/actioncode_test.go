@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/ColinEge/8bd-kbd-api/keydefs"
+	"github.com/ColinEge/8bd-ultimate-api/keydefs"
 )
 
 func TestParseActionCodeBytes(t *testing.T) {

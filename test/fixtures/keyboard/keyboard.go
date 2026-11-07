@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ColinEge/8bd-kbd-api/client"
-	"github.com/ColinEge/8bd-kbd-api/transport"
+	"github.com/ColinEge/8bd-ultimate-api/client"
+	"github.com/ColinEge/8bd-ultimate-api/transport"
 )
 
 type Exchange struct {

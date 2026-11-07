@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ColinEge/8bd-kbd-api/test/steps"
+	"github.com/ColinEge/8bd-ultimate-api/test/steps"
 	"github.com/cucumber/godog"
 )
 

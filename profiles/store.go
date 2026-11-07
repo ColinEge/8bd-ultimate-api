@@ -15,7 +15,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/ColinEge/8bd-kbd-api/client"
+	"github.com/ColinEge/8bd-ultimate-api/client"
 )
 
 var ErrInvalidProfile = errors.New("invalid local profile")

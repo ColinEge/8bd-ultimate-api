@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ColinEge/8bd-kbd-api/transport"
+	"github.com/ColinEge/8bd-ultimate-api/transport"
 )
 
 func TestProfileTwoPackets(t *testing.T) {

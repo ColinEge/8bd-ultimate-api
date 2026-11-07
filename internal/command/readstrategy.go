@@ -4,7 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/ColinEge/8bd-kbd-api/protocol"
+
+	"github.com/ColinEge/8bd-ultimate-api/protocol"
 )
 
 var ErrMalformedResponse = errors.New("malformed command response")

@@ -1,7 +1,7 @@
 package steps
 
 import (
-	"github.com/ColinEge/8bd-kbd-api/client"
+	"github.com/ColinEge/8bd-ultimate-api/client"
 	"github.com/cucumber/godog"
 )
 

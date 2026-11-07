@@ -3,8 +3,8 @@ package command_test
 import (
 	"testing"
 
-	"github.com/ColinEge/8bd-kbd-api/internal/command"
-	"github.com/ColinEge/8bd-kbd-api/keydefs"
+	"github.com/ColinEge/8bd-ultimate-api/internal/command"
+	"github.com/ColinEge/8bd-ultimate-api/keydefs"
 )
 
 func TestKeyActionResponse(t *testing.T) {

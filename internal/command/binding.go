@@ -1,8 +1,8 @@
 package command
 
 import (
-	"github.com/ColinEge/8bd-kbd-api/keydefs"
-	"github.com/ColinEge/8bd-kbd-api/protocol"
+	"github.com/ColinEge/8bd-ultimate-api/keydefs"
+	"github.com/ColinEge/8bd-ultimate-api/protocol"
 )
 
 // BindAction
