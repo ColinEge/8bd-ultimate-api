@@ -61,6 +61,9 @@ func (c *SetProfile) Name() string {
 }
 
 func (c *SetProfile) Build() packets {
+	if c.ProfileName == "" {
+		return protocol.BuildText(protocol.Header(protocol.DirOut, protocol.CommandWriteProfile))
+	}
 	payload := protocol.UTF16BEEncode(c.ProfileName)
 	return protocol.BuildText(protocol.Header(protocol.DirOut, protocol.CommandWriteProfile), payload...)
 }

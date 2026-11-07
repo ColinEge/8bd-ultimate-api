@@ -51,6 +51,7 @@ func (s *keyboard) setProfile(ctx context.Context, title string) error {
 	if err := s.sendResponse(ctx, &command.SetProfile{ProfileName: title}, &response); err != nil {
 		return fmt.Errorf("%w: %w", ErrProfileMutationFailed, err)
 	}
+
 	status, err := response.DecodeStatus()
 	if err != nil {
 		return fmt.Errorf("%w: %w: %w", ErrProfileMutationFailed, ErrMalformedResponse, err)
@@ -59,4 +60,13 @@ func (s *keyboard) setProfile(ctx context.Context, title string) error {
 		return fmt.Errorf("%w: %w: set profile responded %s", ErrProfileMutationFailed, ErrDeviceRejected, status)
 	}
 	return nil
+}
+
+// DeleteProfile clears the device profile with an empty-name set request.
+func (s *keyboard) DeleteProfile(ctx context.Context) error {
+	if err := s.acquire(ctx); err != nil {
+		return err
+	}
+	defer s.release()
+	return s.setProfile(ctx, "")
 }

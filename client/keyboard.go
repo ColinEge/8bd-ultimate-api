@@ -106,6 +106,7 @@ type Keyboard interface {
 
 	GetProfile(ctx context.Context) (string, error)
 	SetProfile(ctx context.Context, title string) error
+	DeleteProfile(ctx context.Context) error
 
 	Bind(ctx context.Context, key KeyID, action Action) error
 	Binding(ctx context.Context, key KeyID) (Binding, error)
