@@ -1,0 +1,554 @@
+# Bindables
+# ---------
+# Bindables is a list of key usages that can be assigned to a keyboard key.
+# The top-level keys represent logical categories and are ordered to match
+# the groups shown in the official 8BitDo Ultimate Software V2.
+
+# Each bindable is represented as a 3-byte HID usage tuple:
+#
+#   [page]-[mod]-[key]
+#
+# Byte meanings:
+#
+# 1. page — HID usage page
+# 2. mod  — modifier usage ID (if applicable)
+# 3. key  — standard usage ID
+#
+# These values follow the USB HID Usage Tables specification:
+# https://www.usb.org/sites/default/files/hut1_5.pdf
+
+# Bindable Usage Format
+# ---------------------
+# Bindable actions are represented by a sequence of bytes describing
+# a HID usage or firmware-specific action.
+#
+# The encoding depends on the HID usage page.
+
+# Keyboard Page (0x07)
+# --------------------
+# Keyboard keys follow a structured 3-byte encoding:
+#
+#   [page]-[mod]-[key]
+#
+# page : HID usage page (always 0x07)
+# mod  : modifier usage ID (if present)
+# key  : standard key usage ID
+#
+# Examples:
+#   07-00-06  -> C
+#   07-e0-00  -> Left Control
+#   07-e0-06  -> Left Control + C
+#
+# This structure allows modifier chords to be represented in a
+# single usage tuple.
+
+# Other Usage Pages
+# -----------------
+# Bindings from other usage pages (mouse functions, consumer controls,
+# shortcuts, etc.) do not follow the same structure as page 0x07.
+#
+# These usages should be treated as opaque byte sequences defined by
+# the keyboard firmware.
+#
+# The length and internal structure may vary.
+
+# Mouse Functions
+# ---------------
+# Mouse-related bindings use a page value of 0x01 rather than the
+# standard HID button page (0x09). This appears to be a firmware
+# convention used by the 8BitDo keyboard.
+#
+# Some mouse actions are simple 3-byte usages:
+#
+#   01-01-00 -> Primary Click
+#   01-02-00 -> Right Click
+#
+# Others encode scrolling actions using longer byte sequences:
+#
+#   01-00-00-00-02 -> Scroll Up
+#   01-00-00-00-fe -> Scroll Down
+#
+# These should be treated as device-specific encodings.
+
+# Consumer / Shortcut Page (0x0C)
+# --------------------------------
+# Consumer controls use page 0x0C and often contain values in both
+# the second and third bytes.
+#
+# Example:
+#   0c-92-01 -> Launch Calculator
+#   0c-23-02 -> Open Default Browser
+#
+# These usages do not represent modifier chords and should not be
+# interpreted using the keyboard-page rules.
+
+Alphanumeric:
+  07-00-04:
+    keyLabel: "A"
+    actionLabel: "A" # Keyboard a and A
+  07-00-05:
+    keyLabel: "B"
+    actionLabel: "B" # Keyboard b and B
+  07-00-06:
+    keyLabel: "C"
+    actionLabel: "C" # Keyboard c and C
+  07-00-07:
+    keyLabel: "D"
+    actionLabel: "D" # Keyboard d and D
+  07-00-08:
+    keyLabel: "E"
+    actionLabel: "E" # Keyboard e and E
+  07-00-09:
+    keyLabel: "F"
+    actionLabel: "F" # Keyboard f and F
+  07-00-0a:
+    keyLabel: "G"
+    actionLabel: "G" # Keyboard g and G
+  07-00-0b:
+    keyLabel: "H"
+    actionLabel: "H" # Keyboard h and H
+  07-00-0c:
+    keyLabel: "I"
+    actionLabel: "I" # Keyboard i and I
+  07-00-0d:
+    keyLabel: "J"
+    actionLabel: "J" # Keyboard j and J
+  07-00-0e:
+    keyLabel: "K"
+    actionLabel: "K" # Keyboard k and K
+  07-00-0f:
+    keyLabel: "L"
+    actionLabel: "L" # Keyboard l and L
+  07-00-10:
+    keyLabel: "M"
+    actionLabel: "M" # Keyboard m and M
+  07-00-11:
+    keyLabel: "N"
+    actionLabel: "N" # Keyboard n and N
+  07-00-12:
+    keyLabel: "O"
+    actionLabel: "O" # Keyboard o and O
+  07-00-13:
+    keyLabel: "P"
+    actionLabel: "P" # Keyboard p and P
+  07-00-14:
+    keyLabel: "Q"
+    actionLabel: "Q" # Keyboard q and Q
+  07-00-15:
+    keyLabel: "R"
+    actionLabel: "R" # Keyboard r and R
+  07-00-16:
+    keyLabel: "S"
+    actionLabel: "S" # Keyboard s and S
+  07-00-17:
+    keyLabel: "T"
+    actionLabel: "T" # Keyboard t and T
+  07-00-18:
+    keyLabel: "U"
+    actionLabel: "U" # Keyboard u and U
+  07-00-19:
+    keyLabel: "V"
+    actionLabel: "V" # Keyboard v and V
+  07-00-1a:
+    keyLabel: "W"
+    actionLabel: "W" # Keyboard w and W
+  07-00-1b:
+    keyLabel: "X"
+    actionLabel: "X" # Keyboard x and X
+  07-00-1c:
+    keyLabel: "Y"
+    actionLabel: "Y" # Keyboard y and Y
+  07-00-1d:
+    keyLabel: "Z"
+    actionLabel: "Z" # Keyboard z and Z
+  07-00-27:
+    keyLabel: "0"
+    actionLabel: "0 and )" # Keyboard 0 and )
+  07-00-1e:
+    keyLabel: "1"
+    actionLabel: "1 and !" # Keyboard 1 and !
+  07-00-1f:
+    keyLabel: "2"
+    actionLabel: "2 and @" # Keyboard 2 and @
+  07-00-20:
+    keyLabel: "3"
+    actionLabel: "3 and #" # Keyboard 3 and #
+  07-00-21:
+    keyLabel: "4"
+    actionLabel: "4 and $" # Keyboard 4 and $
+  07-00-22:
+    keyLabel: "5"
+    actionLabel: "5 and %" # Keyboard 5 and %
+  07-00-23:
+    keyLabel: "6"
+    actionLabel: "6 and ^" # Keyboard 6 and ^
+  07-00-24:
+    keyLabel: "7"
+    actionLabel: "7 and &" # Keyboard 7 and &
+  07-00-25:
+    keyLabel: "8"
+    actionLabel: "8 and *" # Keyboard 8 and *
+  07-00-26:
+    keyLabel: "9"
+    actionLabel: "9 and (" # Keyboard 9 and (
+Function:
+  07-00-3a:
+    keyLabel: "F1"
+    actionLabel: "F1" # Keyboard F1
+  07-00-3b:
+    keyLabel: "F2"
+    actionLabel: "F2" # Keyboard F2
+  07-00-3c:
+    keyLabel: "F3"
+    actionLabel: "F3" # Keyboard F3
+  07-00-3d:
+    keyLabel: "F4"
+    actionLabel: "F4" # Keyboard F4
+  07-00-3e:
+    keyLabel: "F5"
+    actionLabel: "F5" # Keyboard F5
+  07-00-3f:
+    keyLabel: "F6"
+    actionLabel: "F6" # Keyboard F6
+  07-00-40:
+    keyLabel: "F7"
+    actionLabel: "F7" # Keyboard F7
+  07-00-41:
+    keyLabel: "F8"
+    actionLabel: "F8" # Keyboard F8
+  07-00-42:
+    keyLabel: "F9"
+    actionLabel: "F9" # Keyboard F9
+  07-00-43:
+    keyLabel: "F10"
+    actionLabel: "F10" # Keyboard F10
+  07-00-44:
+    keyLabel: "F11"
+    actionLabel: "F11" # Keyboard F11
+  07-00-45:
+    keyLabel: "F12"
+    actionLabel: "F12" # Keyboard F12
+  07-00-68:
+    keyLabel: "F13"
+    actionLabel: "F13" # Keyboard F13
+  07-00-69:
+    keyLabel: "F14"
+    actionLabel: "F14" # Keyboard F14
+  07-00-6a:
+    keyLabel: "F15"
+    actionLabel: "F15" # Keyboard F15
+  07-00-6b:
+    keyLabel: "F16"
+    actionLabel: "F16" # Keyboard F16
+  07-00-6c:
+    keyLabel: "F17"
+    actionLabel: "F17" # Keyboard F17
+  07-00-6d:
+    keyLabel: "F18"
+    actionLabel: "F18" # Keyboard F18
+  07-00-6e:
+    keyLabel: "F19"
+    actionLabel: "F19" # Keyboard F19
+  07-00-6f:
+    keyLabel: "F20"
+    actionLabel: "F20" # Keyboard F20
+  07-00-70:
+    keyLabel: "F21"
+    actionLabel: "F21" # Keyboard F21
+  07-00-71:
+    keyLabel: "F22"
+    actionLabel: "F22" # Keyboard F22
+  07-00-72:
+    keyLabel: "F23"
+    actionLabel: "F23" # Keyboard F23
+  07-00-73:
+    keyLabel: "F24"
+    actionLabel: "F24" # Keyboard F24
+Numpad:
+  07-00-53:
+    keyLabel: "Num"
+    actionLabel: "Num Lock" # Keyboard Num Lock and Clear
+  07-00-62:
+    keyLabel: "0"
+    actionLabel: "Num 0 and Insert" # Keypad 0 and Insert
+  07-00-59:
+    keyLabel: "1"
+    actionLabel: "Num 1 and End" # Keypad 1 and End
+  07-00-5a:
+    keyLabel: "2"
+    actionLabel: "Num 2 and Down Arrow" # Keypad 2 and Down Arrow
+  07-00-5b:
+    keyLabel: "3"
+    actionLabel: "Num 3 and PageDn" # Keypad 3 and PageDn
+  07-00-5c:
+    keyLabel: "4"
+    actionLabel: "Num 4 and Left Arrow" # Keypad 4 and Left Arrow
+  07-00-5d:
+    keyLabel: "5"
+    actionLabel: "Num 5" # Keypad 5
+  07-00-5e:
+    keyLabel: "6"
+    actionLabel: "Num 6 and Right Arrow" # Keypad 6 and Right Arrow
+  07-00-5f:
+    keyLabel: "7"
+    actionLabel: "Num 7 and Home" # Keypad 7 and Home
+  07-00-60:
+    keyLabel: "8"
+    actionLabel: "Num 8 and Up Arrow" # Keypad 8 and Up Arrow
+  07-00-61:
+    keyLabel: "9"
+    actionLabel: "Num 9 and Page Up" # Keypad 9 and Page Up
+  07-00-56:
+    keyLabel: "-"
+    actionLabel: "Num -" # Keypad -
+  07-00-54:
+    keyLabel: "/"
+    actionLabel: "Num /" # Keypad /
+  07-00-55:
+    keyLabel: "*"
+    actionLabel: "Num *" # Keypad *
+  07-00-57:
+    keyLabel: "+"
+    actionLabel: "Num +" # Keypad +
+  07-00-63:
+    keyLabel: "Delete"
+    actionLabel: "Num . and Delete" # Keypad . and Delete
+  07-00-58:
+    keyLabel: "ENTER"
+    actionLabel: "Num Enter" # Keypad ENTER
+Navigation:
+  07-00-52:
+    keyLabel: "↑"
+    actionLabel: "Up" # Keyboard Up Arrow
+  07-00-51:
+    keyLabel: "↓"
+    actionLabel: "Down" # Keyboard Down Arrow
+  07-00-50:
+    keyLabel: "←"
+    actionLabel: "Left" # Keyboard Left Arrow
+  07-00-4f:
+    keyLabel: "→"
+    actionLabel: "Right" # Keyboard Right Arrow
+  07-00-4b:
+    keyLabel: "Pgup"
+    actionLabel: "Page Up" # Keyboard Page Up
+  07-00-4e:
+    keyLabel: "Pgdn"
+    actionLabel: "Page Down" # Keyboard Page Down
+  07-00-2a:
+    keyLabel: "Backspace"
+    actionLabel: "Backspace" # Keyboard DELETE (Backspace)
+  07-00-2b:
+    keyLabel: "Tab"
+    actionLabel: "Tab" # Keyboard Tab
+  07-00-2c:
+    keyLabel: "Space"
+    actionLabel: "Space" # Keyboard Spacebar
+  07-00-28:
+    keyLabel: "Enter"
+    actionLabel: "Enter" # Keyboard Return (ENTER)
+  07-00-29:
+    keyLabel: "Esc"
+    actionLabel: "Esc" # Keyboard ESCAPE
+  07-00-49:
+    keyLabel: "Insert"
+    actionLabel: "Insert" # Keyboard Insert
+  07-00-4a:
+    keyLabel: "Home"
+    actionLabel: "Home" # Keyboard Home
+  07-00-4c:
+    keyLabel: "Del"
+    actionLabel: "Delete" # Keyboard Delete Forward
+  07-00-4d:
+    keyLabel: "End"
+    actionLabel: "End" # Keyboard End
+  07-00-46:
+    keyLabel: "Prtsc"
+    actionLabel: "Print Screen" # Keyboard PrintScreen
+  07-00-48:
+    keyLabel: "Pause"
+    actionLabel: "Pause" # Keyboard Pause
+Modifier:
+  07-e0-00:
+    keyLabel: "Ctrl"
+    actionLabel: "Left Ctrl" # Keyboard Left Control
+  07-e4-00:
+    keyLabel: "Ctrl"
+    actionLabel: "Right Ctrl" # Keyboard Right Control
+  07-e1-00:
+    keyLabel: "Shift"
+    actionLabel: "Left Shift" # Keyboard Left Shift
+  07-e5-00:
+    keyLabel: "Shift"
+    actionLabel: "Right Shift" # Keyboard Right Shift
+  07-e2-00:
+    keyLabel: "Alt"
+    actionLabel: "Left Alt" # Keyboard Left Alt
+  07-e6-00:
+    keyLabel: "Alt"
+    actionLabel: "Right Alt" # Keyboard Right Alt
+  07-e3-00:
+    keyLabel: "Win"
+    actionLabel: "Left Win" # Keyboard Left GUI
+  07-e7-00:
+    keyLabel: "Win"
+    actionLabel: "Right Win" # Keyboard Right GUI
+  07-00-39:
+    keyLabel: "Capslock"
+    actionLabel: "Caps Lock" # Keyboard Caps Lock
+  07-00-47:
+    keyLabel: "Scrlk"
+    actionLabel: "Scroll Lock" # Keyboard Scroll Lock
+  07-00-03:
+    keyLabel: "Fn"
+    actionLabel: "Fn" # Keyboard ErrorUndefined
+  07-e1-43: # Shift + F10
+    actionLabel: "Menu"
+Symbol:
+  07-00-35:
+    keyLabel: "`"
+    actionLabel: "`"
+  07-e1-35:
+    actionLabel: "~"
+  07-e1-1e:
+    keyLabel: "!"
+    actionLabel: "!"
+  07-e1-1f:
+    keyLabel: "@"
+    actionLabel: "@"
+  07-e1-20:
+    keyLabel: "#"
+    actionLabel: "#"
+  07-e1-21:
+    keyLabel: "$"
+    actionLabel: "$"
+  07-e1-22:
+    keyLabel: "%"
+    actionLabel: "%"
+  07-e1-23:
+    keyLabel: "^"
+    actionLabel: "^"
+  07-e1-24:
+    keyLabel: "&"
+    actionLabel: "&"
+  07-e1-25:
+    keyLabel: "*"
+    actionLabel: "*"
+  07-e1-26:
+    keyLabel: "("
+    actionLabel: "("
+  07-e1-27:
+    keyLabel: ")"
+    actionLabel: ")"
+  07-00-2d:
+    keyLabel: "-"
+    actionLabel: "-"
+  07-00-2e:
+    keyLabel: "="
+    actionLabel: "="
+  07-e1-2d:
+    actionLabel: "_"
+  07-e1-2e:
+    actionLabel: "+"
+  07-00-2f:
+    keyLabel: "["
+    actionLabel: "["
+  07-00-30:
+    keyLabel: "]"
+    actionLabel: "]"
+  07-00-31:
+    keyLabel: "\\"
+    actionLabel: "\\"
+  07-e1-2f:
+    actionLabel: "{"
+  07-e1-30:
+    actionLabel: "}"
+  07-e1-31:
+    actionLabel: "|"
+  07-00-33:
+    keyLabel: ";"
+    actionLabel: ";"
+  07-00-34:
+    keyLabel: "'"
+    actionLabel: "'"
+  07-e1-33:
+    actionLabel: ":"
+  07-e1-34:
+    actionLabel: "\""
+  07-00-36:
+    keyLabel: ","
+    actionLabel: ","
+  07-00-37:
+    keyLabel: "."
+    actionLabel: "."
+  07-00-38:
+    keyLabel: "/"
+    actionLabel: "/"
+  07-e1-36:
+    actionLabel: "<"
+  07-e1-37:
+    actionLabel: ">"
+  07-e1-38:
+    actionLabel: "?"
+Mouse Function:
+  01-01-00:
+    actionLabel: "Primary Click"
+  01-02-00:
+    actionLabel: "Right Click"
+  01-04-00:
+    actionLabel: "Scroll Click"
+  01-10-00:
+    actionLabel: "Forward"
+  01-08-00:
+    actionLabel: "Back"
+  01-80-00:
+    actionLabel: "Double Click"
+  01-00-00-00-02:
+    actionLabel: "Scroll Up"
+  01-00-00-00-fe:
+    actionLabel: "Scroll Down"
+  01-00-00-00-00-fe:
+    actionLabel: "Scroll Left"
+  01-00-00-00-00-02:
+    actionLabel: "Scroll Right"
+Shortcut:
+  0c-ea-00:
+    actionLabel: "Volume Down" # Volume Decrement
+  0c-e9-00:
+    actionLabel: "Volume Up" # Volume Increment
+  0c-e2-00:
+    actionLabel: "Mute Volume" # Mute
+  0c-cd-00:
+    actionLabel: "Play/Pause" # Play/Pause
+  0c-b6-00:
+    actionLabel: "Previous Track" # Scan Previous Track 
+  0c-b5-00:
+    actionLabel: "Next Track" # Scan Next Track 
+  0c-8a-01:
+    actionLabel: "Mail" # May be Media Select WWW
+  07-e3-08:
+    actionLabel: "File Explorer" # Win + E
+  0c-92-01:
+    actionLabel: "Launch Calculator" # Media Select VCR
+  0c-23-02:
+    actionLabel: "Open Default Browser" # Reserved
+  0c-70-00:
+    actionLabel: "Display Brightness Down" # Display Brightness Decrement
+  0c-6f-00:
+    actionLabel: "Display Brightness Up" # Display Brightness Increment
+Disable:
+  07-00-00:
+    actionLabel: "disabled" # (no key pressed)
+
+# KeyOnly
+# -------
+# Some physical keys exist on the keyboard but cannot be assigned
+# as bindings in the firmware. These are listed in the KeyOnly
+# category so they can appear in keyboard layouts but are excluded
+# from bindable usage lists.
+KeyOnly:
+  07-e9-00:
+    keyLabel: "A!" # (Super A)
+  07-e8-00:
+    keyLabel: "B!" # (Super B)
+
