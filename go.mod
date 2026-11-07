@@ -1,4 +1,4 @@
-module github.com/ColinEge/8bd-kbd-api
+module github.com/ColinEge/8bd-ultimate-api
 
 go 1.26.4
 
