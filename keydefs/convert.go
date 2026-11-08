@@ -41,9 +41,10 @@ const hidPageKeyboard = 0x07 // https://www.usb.org/sites/default/files/hut1_5.p
 //	Modifier keys
 //	  07-E0-00  → PhysicalKey = E0 - conversionOffset
 //
-// Ordinary physical IDs end at 0x63; 0x64..0x6b encode modifiers.
+// Ordinary physical IDs end at 0x63; 0x64..0x6b encode modifiers,
+// and 0xe8..0xe9 encode Super B/A defaults (07-E8-00 and 07-E9-00).
 // This is firmware addressing, not HID usage-to-key identity. In particular,
-// F13..F24, disabled actions, chords, and Super keys have no conversion here.
+// F13..F24, disabled actions, and chords have no conversion here.
 // Returns (0, false) for actions outside these encodings.
 func ActionToPhysicalKey(action ActionCode) (KeyID, bool) {
 	if !action.IsKeyboardUsage() {
@@ -56,6 +57,11 @@ func ActionToPhysicalKey(action ActionCode) (KeyID, bool) {
 	// Standard key (07-00-XX)
 	if byte1 == 0x00 && byte2 >= 4 && byte2 <= byteSwapHWKeyBreakpoint {
 		return KeyID(byte2), true
+	}
+
+	// Super keys use their firmware usage byte directly as the physical ID.
+	if (byte1 == 0xe8 || byte1 == 0xe9) && byte2 == 0 {
+		return KeyID(byte1), true
 	}
 
 	// Modifier key (07-E0-00 and above)
@@ -84,10 +90,13 @@ func (a ActionCode) IsKeyboardUsage() bool {
 //	  PhysicalKey > byteSwapHWKeyBreakpoint
 //	  → [07, PhysicalKey + conversionOffset, 00]
 //
-// Valid firmware IDs are 0x04..0x6b. IDs outside that range return zero;
-// callers performing I/O must validate the ID first. Super addressing is
-// intentionally unsupported.
+// Super B/A instead use physical IDs 0xe8/0xe9 and actions [07, ID, 00].
+// Valid firmware IDs are 0x04..0x6b and 0xe8..0xe9. Other IDs return zero;
+// callers performing I/O must validate the ID first.
 func PhysicalKeyToAction(key byte) ActionCode {
+	if key == 0xe8 || key == 0xe9 {
+		return ActionCode{hidPageKeyboard, key, 0x00}
+	}
 	if key < 4 || key > 0x6b {
 		return ActionCode{}
 	}

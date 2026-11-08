@@ -548,7 +548,8 @@ Disable:
 # from bindable usage lists.
 KeyOnly:
   07-e9-00:
-    keyLabel: "A!" # (Super A)
+    keyLabel: "A" # (Super A)
+    actionLabel: "Super A"
   07-e8-00:
-    keyLabel: "B!" # (Super B)
-
+    keyLabel: "B" # (Super B)
+    actionLabel: "Super B"

@@ -59,7 +59,7 @@ func (s *keyboard) release() { s.gate <- struct{}{} }
 
 func validateKey(key KeyID) error {
 	// These are firmware IDs, not a guarantee of a model's physical layout.
-	if key < 4 || key > 0x6b {
+	if keydefs.PhysicalKeyToAction(byte(key)) == (Action{}) {
 		return fmt.Errorf("%w: firmware key %s", ErrInvalidKey, key)
 	}
 	return nil
@@ -72,7 +72,10 @@ func validateChange(change BindingChange) error {
 	if change.Action == (Action{}) {
 		return fmt.Errorf("%w: zero is an absent override, not a bindable action", ErrInvalidAction)
 	}
-	if !keydefs.SupportedAction(change.Action) {
+	// Super defaults can only be written back to their own physical key.
+	superDefault := (change.Key == KeySuperA || change.Key == KeySuperB) &&
+		change.Action == keydefs.PhysicalKeyToAction(byte(change.Key))
+	if !keydefs.SupportedAction(change.Action) && !superDefault {
 		return fmt.Errorf("%w: action %s", ErrUnsupported, change.Action)
 	}
 	return nil
@@ -212,8 +215,19 @@ func (s *keyboard) Disable(ctx context.Context, key KeyID) error {
 	return s.Bind(ctx, key, ActionDisabled())
 }
 
-// ResetToDefault binds the key's factory-default action, not a previous custom mapping.
+// ResetToDefault clears Super-key overrides or binds an ordinary key's
+// factory-default action. It does not restore a previous custom mapping.
 func (s *keyboard) ResetToDefault(ctx context.Context, key KeyID) error {
+	if key == KeySuperA || key == KeySuperB {
+		if err := s.acquire(ctx); err != nil {
+			return fmt.Errorf("reset key %s to default failed: %w", key, err)
+		}
+		defer s.release()
+		if err := s.bind(ctx, key, Action{}); err != nil {
+			return fmt.Errorf("reset key %s to default failed: %w", key, err)
+		}
+		return nil
+	}
 	if err := s.Bind(ctx, key, keydefs.PhysicalKeyToAction(byte(key))); err != nil {
 		return fmt.Errorf("reset key %s to default failed: %w", key, err)
 	}

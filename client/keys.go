@@ -109,3 +109,8 @@ const (
 	KeyRightShift
 	KeyRightAlt
 )
+
+const (
+	KeySuperB KeyID = 0xe8
+	KeySuperA KeyID = 0xe9
+)

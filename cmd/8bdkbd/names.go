@@ -128,6 +128,12 @@ func parseAction(text string) (client.Action, error) {
 }
 
 func parseKey(text string) (client.KeyID, error) {
+	switch strings.ToLower(text) {
+	case "supera":
+		return client.KeySuperA, nil
+	case "superb":
+		return client.KeySuperB, nil
+	}
 	if action, ok := findAction(text); ok {
 		if key, ok := keydefs.ActionToPhysicalKey(action); ok {
 			return key, nil
@@ -137,6 +143,12 @@ func parseKey(text string) (client.KeyID, error) {
 }
 
 func actionName(action client.Action) string {
+	switch action {
+	case (client.Action{7, 0xe9, 0}):
+		return "SuperA"
+	case (client.Action{7, 0xe8, 0}):
+		return "SuperB"
+	}
 	for _, entry := range namedActions {
 		if entry.action == action {
 			return entry.name

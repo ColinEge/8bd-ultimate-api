@@ -42,15 +42,21 @@ func TestParseKeyAndActionAreDistinct(t *testing.T) {
 		{"F12", client.KeyF12}, {"Numpad1", client.KeyNumpad1},
 		{"leftctrl", client.KeyLeftCtrl}, {"RightCtrl", client.KeyRightCtrl},
 		{"RightAlt", client.KeyRightAlt}, {"Minus", client.KeyMinus},
+		{"SuperA", client.KeySuperA}, {"superb", client.KeySuperB},
 	} {
 		got, err := parseKey(tt.name)
 		if err != nil || got != tt.want {
 			t.Fatalf("key %s: got %s, %v; want %s", tt.name, got, err, tt.want)
 		}
 	}
-	for _, name := range []string{"F13", "VolumeUp", "Disabled", "Fn", "LeftCtrl+C", "0x04", "256", "SuperA"} {
+	for _, name := range []string{"F13", "VolumeUp", "Disabled", "Fn", "LeftCtrl+C", "0x04", "256"} {
 		if _, err := parseKey(name); !errors.Is(err, client.ErrInvalidKey) {
 			t.Errorf("key %q: expected invalid key, got %v", name, err)
+		}
+		for _, name := range []string{"SuperA", "SuperB", "LeftCtrl+SuperA", "LeftCtrl+SuperB"} {
+			if _, err := parseAction(name); err == nil {
+				t.Errorf("physical-only action %q accepted", name)
+			}
 		}
 	}
 }

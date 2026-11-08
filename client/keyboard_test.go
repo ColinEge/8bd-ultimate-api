@@ -56,6 +56,10 @@ func TestKeyboardRejectsInvalidChangesWithoutIO(t *testing.T) {
 		{"invalid key", []client.BindingChange{{Key: 0, Action: client.ActionB()}}, client.ErrInvalidKey},
 		{"zero action", []client.BindingChange{{Key: client.KeyA}}, client.ErrInvalidAction},
 		{"unsupported", []client.BindingChange{{Key: client.KeyA, Action: client.Action{0xff, 1, 2}}}, client.ErrUnsupported},
+		{"Super A target", []client.BindingChange{{Key: client.KeyA, Action: client.Action{7, 0xe9, 0}}}, client.ErrUnsupported},
+		{"Super B target", []client.BindingChange{{Key: client.KeyB, Action: client.Action{7, 0xe8, 0}}}, client.ErrUnsupported},
+		{"cross Super target", []client.BindingChange{{Key: client.KeySuperA, Action: client.Action{7, 0xe8, 0}}}, client.ErrUnsupported},
+		{"above Super range", []client.BindingChange{{Key: 0x6e, Action: client.ActionB()}}, client.ErrInvalidKey},
 		{"invalid second", []client.BindingChange{{Key: client.KeyA, Action: client.ActionB()}, {Key: 255, Action: client.ActionB()}}, client.ErrInvalidKey},
 		{"duplicate", []client.BindingChange{{Key: client.KeyA, Action: client.ActionB()}, {Key: client.KeyA, Action: client.ActionC()}}, client.ErrInvalidKey},
 	} {
@@ -78,6 +82,86 @@ func TestKeyboardRejectsInvalidChangesWithoutIO(t *testing.T) {
 		if _, err := client.Chord(client.LeftCtrl, action); !errors.Is(err, client.ErrInvalidAction) {
 			t.Fatalf("chord %s: %v", action, err)
 		}
+	}
+}
+
+func TestSuperKeyBindings(t *testing.T) {
+	for _, tt := range []struct {
+		key    client.KeyID
+		label  string
+		action client.Action
+	}{
+		{client.KeySuperB, "B", client.Action{7, 0xe8, 0}},
+		{client.KeySuperA, "A", client.Action{7, 0xe9, 0}},
+	} {
+		t.Run(tt.key.String(), func(t *testing.T) {
+			f := newFixture(t)
+			f.Exchanges = []keyboard.Exchange{
+				{Write: actionRequest(byte(tt.key)), Response: actionReply(byte(tt.key), client.Action{})},
+				{Write: bindRequest(tt.key, client.ActionC()), Response: []byte{0x54, 0xe4, 8}},
+				{Write: actionRequest(byte(tt.key)), Response: actionReply(byte(tt.key), client.ActionC())},
+				{Write: bindRequest(tt.key, client.ActionDisabled()), Response: []byte{0x54, 0xe4, 8}},
+				{Write: bindRequest(tt.key, client.Action{}), Response: []byte{0x54, 0xe4, 8}},
+				{Write: actionRequest(byte(tt.key)), Response: actionReply(byte(tt.key), client.Action{})},
+			}
+			err := f.Keyboard.WithKeyboard(context.Background(), f.Device.ID, func(k client.Keyboard) error {
+				ctx := context.Background()
+				found := false
+				for _, key := range k.Keys() {
+					if key.ID == tt.key {
+						found = true
+						if key.Label != tt.label || key.Default != tt.action {
+							t.Fatalf("Super key metadata: %+v", key)
+						}
+					}
+				}
+				if !found {
+					t.Fatal("Super key missing from catalog")
+				}
+				for _, action := range k.Actions() {
+					if action.Action == (client.Action{7, 0xe8, 0}) || action.Action == (client.Action{7, 0xe9, 0}) {
+						t.Fatal("Super key exposed as assignable action")
+					}
+				}
+				binding, err := k.Binding(ctx, tt.key)
+				if err != nil {
+					return err
+				}
+				if binding.State != client.BindingDefault || binding.Effective != tt.action {
+					t.Fatalf("Super default: %+v", binding)
+				}
+				if err := k.Bind(ctx, tt.key, client.ActionC()); err != nil {
+					return err
+				}
+				binding, err = k.Binding(ctx, tt.key)
+				if err != nil {
+					return err
+				}
+				if binding.State != client.BindingAction || binding.Action != client.ActionC() {
+					t.Fatalf("Super override: %+v", binding)
+				}
+				if err := k.Disable(ctx, tt.key); err != nil {
+					return err
+				}
+				if err := k.ResetToDefault(ctx, tt.key); err != nil {
+					return err
+				}
+				binding, err = k.Binding(ctx, tt.key)
+				if err != nil {
+					return err
+				}
+				if binding.State != client.BindingDefault || binding.Action != (client.Action{}) || binding.Effective != tt.action {
+					t.Fatalf("Super reset: %+v", binding)
+				}
+				return nil
+			})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if err := f.AssertComplete(); err != nil {
+				t.Fatal(err)
+			}
+		})
 	}
 }
 

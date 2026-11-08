@@ -70,6 +70,11 @@ such as `Enter`, `Numpad1`, and `VolumeUp`. List them with `keys DEVICE` and
 `actions DEVICE`. Chords take one modifier, such as `LeftCtrl+C`. Quote profile
 titles containing spaces: `set-profile DEVICE "Gaming profile" --write`.
 
+`SuperB` (physical ID `0xe8`) and `SuperA` (`0xe9`) support reading, rebinding,
+disabling, and resetting to their own defaults. They are physical-only keys,
+not actions assignable to other keys. Their printed labels are B and A;
+use `SuperB` and `SuperA` in CLI commands to distinguish them from letter keys.
+
 All writes require `--write`. Back up the current binding with `binding` and use
 a nonessential key. `reset-to-default` sets the factory default, not a previous custom
 binding; batches have no rollback. Options can precede or follow arguments;

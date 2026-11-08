@@ -104,6 +104,11 @@ func TestResetToDefault(t *testing.T) {
 	}{
 		{name: "A", key: 4, action: keydefs.ActionCode{7, 0, 4}, reply: []byte{0x54, 0xe4, 8}},
 		{name: "modifier", key: 0x66, action: keydefs.ActionCode{7, 0xe2, 0}, reply: []byte{0x54, 0xe4, 8}},
+		{name: "Super B", key: 0xe8, reply: []byte{0x54, 0xe4, 8}},
+		{name: "Super A", key: 0xe9, reply: []byte{0x54, 0xe4, 8}},
+		{name: "Super rejected", key: 0xe8, reply: []byte{0x54, 0xe4, 9}, errorText: "device responded bad"},
+		{name: "Super write failure", key: 0xe9, writeErr: transportErr, errorText: "BindAction write failed"},
+		{name: "Super read failure", key: 0xe8, readErr: transportErr, errorText: "BindAction read failed"},
 		{name: "rejected", key: 4, action: keydefs.ActionCode{7, 0, 4}, reply: []byte{0x54, 0xe4, 9}, errorText: "device responded bad"},
 		{name: "malformed", key: 4, action: keydefs.ActionCode{7, 0, 4}, reply: []byte{0x54}, errorText: "unexpected status payload"},
 		{name: "write failure", key: 4, action: keydefs.ActionCode{7, 0, 4}, writeErr: transportErr, errorText: "BindAction write failed"},
