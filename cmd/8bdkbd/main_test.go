@@ -26,7 +26,8 @@ func TestRunRejectsInvalidArgumentsBeforeOpeningUSB(t *testing.T) {
 		{"bind", "001-003", "A", "unknown", "--write"},
 		{"bind", "001-003", "A", "LeftCtrl+RightAlt+C", "--write"},
 		{"bind", "001-003", "A", "LeftCtrl+VolumeUp", "--write"},
-		{"restore", "001-003", "A"}, {"disable", "001-003", "A"},
+		{"reset-to-default", "001-003", "A"}, {"disable", "001-003", "A"},
+		{"restore", "001-003", "A", "--write"},
 		{"delete-profile", "001-003"}, {"set-profile", "001-003", "Gaming"},
 		{"set-profile", "001-003", "", "--write"},
 		{"set-profile", "001-003", strings.Repeat("x", 30), "--write"},
@@ -69,7 +70,7 @@ func TestRunHelp(t *testing.T) {
 }
 
 func TestRunCommands(t *testing.T) {
-	for _, command := range []string{"scan", "info", "binding", "bind", "disable", "restore", "apply-bindings", "get-profile", "set-profile", "delete-profile"} {
+	for _, command := range []string{"scan", "info", "binding", "bind", "disable", "reset-to-default", "apply-bindings", "get-profile", "set-profile", "delete-profile"} {
 		t.Run(command, func(t *testing.T) {
 			f := &keyboard.KeyboardFixture{}
 			if err := f.Reset(); err != nil {
@@ -99,7 +100,7 @@ func TestRunCommands(t *testing.T) {
 				case "disable":
 					args = append(args, "A", "--write")
 					copy(packet, []byte{0x52, 0xfa, 3, 0x0c, 0, 0xaa, 9, 0x71, 4, 7, 0, 0})
-				case "restore":
+				case "reset-to-default":
 					args = append(args, "A", "--write")
 					copy(packet, []byte{0x52, 0xfa, 3, 0x0c, 0, 0xaa, 9, 0x71, 4, 7, 0, 4})
 				case "apply-bindings":
@@ -353,7 +354,7 @@ func TestCommandsCoverKeyboardAPI(t *testing.T) {
 		"Info": "info", "FirmwareVersion": "firmware-version",
 		"Keys": "keys", "Actions": "actions",
 		"Binding": "binding", "Bindings": "bindings",
-		"Bind": "bind", "Disable": "disable", "Restore": "restore",
+		"Bind": "bind", "Disable": "disable", "ResetToDefault": "reset-to-default",
 		"ApplyBindings": "apply-bindings",
 		"GetProfile":    "get-profile", "SetProfile": "set-profile", "DeleteProfile": "delete-profile",
 	}

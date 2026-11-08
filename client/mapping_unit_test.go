@@ -91,8 +91,8 @@ func TestAction(t *testing.T) {
 	}
 }
 
-func TestRestoreKey(t *testing.T) {
-	transportErr := errors.New("restore transport failure")
+func TestResetToDefault(t *testing.T) {
+	transportErr := errors.New("reset to default transport failure")
 	for _, tt := range []struct {
 		name      string
 		key       byte
@@ -116,14 +116,14 @@ func TestRestoreKey(t *testing.T) {
 			copy(packet[9:], tt.action[:])
 			f.Exchanges = []keyboard.Exchange{{Write: packet, Response: tt.reply, WriteErr: tt.writeErr, ReadErr: tt.readErr}}
 			err := f.Keyboard.WithKeyboard(context.Background(), f.Device.ID, func(s client.Keyboard) error {
-				return s.Restore(context.Background(), keydefs.KeyID(tt.key))
+				return s.ResetToDefault(context.Background(), keydefs.KeyID(tt.key))
 			})
 			if tt.errorText == "" {
 				if err != nil {
 					t.Fatal(err)
 				}
-			} else if err == nil || !strings.Contains(err.Error(), "restore key") || !strings.Contains(err.Error(), tt.errorText) {
-				t.Fatalf("got %v, want restore error containing %q", err, tt.errorText)
+			} else if err == nil || !strings.Contains(err.Error(), "reset key") || !strings.Contains(err.Error(), tt.errorText) {
+				t.Fatalf("got %v, want reset to default error containing %q", err, tt.errorText)
 			}
 			if (tt.writeErr != nil || tt.readErr != nil) && !errors.Is(err, transportErr) {
 				t.Fatalf("lost transport error: %v", err)

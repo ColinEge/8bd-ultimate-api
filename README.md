@@ -35,7 +35,7 @@ func rebind(ctx context.Context) (err error) {
 ```
 
 Import `github.com/ColinEge/8bd-ultimate-api/client`. `WithKeyboard` manages
-the connection for the callback. Use `Binding` to inspect a key, `Restore` to
+the connection for the callback. Use `Binding` to inspect a key, `ResetToDefault` to
 set its factory-default action, and `ApplyBindings` to apply multiple changes.
 Batch writes are not atomic and are not automatically rolled back; check the
 returned error before deciding whether to retry.
@@ -54,12 +54,13 @@ Run from this module directory, or install the tool with
 8bdkbd scan
 8bdkbd binding 001-003 A
 8bdkbd bind 001-003 A B --write
+8bdkbd reset-to-default 001-003 A --write
 8bdkbd apply-bindings 001-003 A=B C=LeftCtrl+C --write
 8bdkbd --help
 ```
 
 Commands mirror the `Keyboard` API: `info`, `firmware-version`, `keys`,
-`actions`, `binding`, `bindings`, `bind`, `disable`, `restore`, `apply-bindings`,
+`actions`, `binding`, `bindings`, `bind`, `disable`, `reset-to-default`, `apply-bindings`,
 `get-profile`, `set-profile`, and `delete-profile`. Connections are opened and
 closed automatically; firmware querying currently returns an unsupported error.
 
@@ -70,7 +71,7 @@ such as `Enter`, `Numpad1`, and `VolumeUp`. List them with `keys DEVICE` and
 titles containing spaces: `set-profile DEVICE "Gaming profile" --write`.
 
 All writes require `--write`. Back up the current binding with `binding` and use
-a nonessential key. `restore` sets the factory default, not a previous custom
+a nonessential key. `reset-to-default` sets the factory default, not a previous custom
 binding; batches have no rollback. Options can precede or follow arguments;
 `--timeout 10s` is the default.
 

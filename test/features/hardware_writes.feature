@@ -19,8 +19,8 @@ Feature: Physical keyboard binding read-back
       | mute        |
       | B           |
 
-  Scenario: Rebind the selected key to its default action
-    When I restore the selected physical key
+  Scenario: Reset the selected key to its default action
+    When I reset the selected physical key to default
     Then its effective action should be the factory default
 
   Scenario: Preserve a binding across API client recreation

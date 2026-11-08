@@ -20,9 +20,9 @@ Feature: Public rebinding API
       | write failure | BindAction write failed        |
       | read failure  | BindAction read failed         |
 
-  Scenario: Bind, read, and restore A in one session
+  Scenario: Bind, read, and reset A to default in one session
     Given a scripted keyboard for a binding round-trip
-    When I bind, read, and restore A through the public API
+    When I bind, read, and reset A to default through the public API
     Then the binding result should be "success"
     And the binding session should be closed
 
@@ -64,9 +64,9 @@ Feature: Public rebinding API
       | scroll left  |
       | next track   |
 
-  Scenario Outline: Read and restore physical modifier defaults
+  Scenario Outline: Read and reset physical modifiers to default
     Given a scripted default for modifier key "<key>" at "<id>" with action "<action>"
-    When I read and restore the modifier through the public API
+    When I read and reset the modifier to default through the public API
     Then the binding result should be "success"
     And the binding session should be closed
 

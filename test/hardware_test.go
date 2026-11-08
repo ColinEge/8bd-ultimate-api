@@ -253,9 +253,9 @@ func runHardwareFeatures(t *testing.T, writes bool) {
 				}
 				return nil
 			})
-			sc.Step(`^I restore the selected physical key$`, func() error {
+			sc.Step(`^I reset the selected physical key to default$`, func() error {
 				restoreNeeded = true
-				return c.WithKeyboard(scenarioCtx, id, func(k client.Keyboard) error { return k.Restore(scenarioCtx, key) })
+				return c.WithKeyboard(scenarioCtx, id, func(k client.Keyboard) error { return k.ResetToDefault(scenarioCtx, key) })
 			})
 			sc.Step(`^its effective action should be the factory default$`, func() error {
 				binding, err := readBinding(scenarioCtx, c)
@@ -287,7 +287,7 @@ func restoreHardwareBinding(ctx context.Context, c client.Client, id client.Devi
 	return c.WithKeyboard(ctx, id, func(k client.Keyboard) error {
 		var restoreErr error
 		if saved.State == client.BindingDefault {
-			restoreErr = k.Restore(ctx, saved.Key)
+			restoreErr = k.ResetToDefault(ctx, saved.Key)
 		} else {
 			restoreErr = k.Bind(ctx, saved.Key, saved.Action)
 		}

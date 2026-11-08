@@ -112,7 +112,7 @@ type Keyboard interface {
 	Binding(ctx context.Context, key KeyID) (Binding, error)
 	Bindings(ctx context.Context) ([]Binding, error)
 	Disable(ctx context.Context, key KeyID) error
-	Restore(ctx context.Context, key KeyID) error
+	ResetToDefault(ctx context.Context, key KeyID) error
 
 	ApplyBindings(
 		ctx context.Context,

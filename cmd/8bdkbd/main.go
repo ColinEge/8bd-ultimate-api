@@ -26,7 +26,7 @@ Commands:
   bindings DEVICE                      List stored binding overrides
   bind DEVICE KEY ACTION               Bind a key to an action
   disable DEVICE KEY                   Disable a key
-  restore DEVICE KEY                   Bind the factory-default action
+  reset-to-default DEVICE KEY          Bind the factory-default action
   apply-bindings DEVICE KEY=ACTION...   Apply an ordered batch of changes
   get-profile DEVICE                   Read the device profile title
   set-profile DEVICE TITLE             Set the device profile title
@@ -40,7 +40,7 @@ Options may appear before or after arguments:
   --write              Required for every write command
   --help               Show command help
 
-Back up bindings before writing. Restore uses the factory default, not a
+Back up bindings before writing. Reset-to-default uses the factory default, not a
 previous custom binding. Batches are not atomic and have no rollback.
 `
 
@@ -61,7 +61,7 @@ var commands = map[string]commandSpec{
 	"bindings":         {"DEVICE", 1, 1, false},
 	"bind":             {"DEVICE KEY ACTION", 3, 3, true},
 	"disable":          {"DEVICE KEY", 2, 2, true},
-	"restore":          {"DEVICE KEY", 2, 2, true},
+	"reset-to-default": {"DEVICE KEY", 2, 2, true},
 	"apply-bindings":   {"DEVICE KEY=ACTION...", 2, -1, true},
 	"get-profile":      {"DEVICE", 1, 1, false},
 	"set-profile":      {"DEVICE TITLE", 2, 2, true},
@@ -130,7 +130,7 @@ func run(ctx context.Context, args []string, out, errOut io.Writer, newClient cl
 	var action client.Action
 	var changes []client.BindingChange
 	switch command {
-	case "binding", "bind", "disable", "restore":
+	case "binding", "bind", "disable", "reset-to-default":
 		key, err = parseKey(positional[1])
 		if err != nil {
 			return err
@@ -231,8 +231,8 @@ func run(ctx context.Context, args []string, out, errOut io.Writer, newClient cl
 				return k.Bind(ctx, key, action)
 			case "disable":
 				return k.Disable(ctx, key)
-			case "restore":
-				return k.Restore(ctx, key)
+			case "reset-to-default":
+				return k.ResetToDefault(ctx, key)
 			case "apply-bindings":
 				return k.ApplyBindings(ctx, changes)
 			case "get-profile":

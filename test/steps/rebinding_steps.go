@@ -15,7 +15,7 @@ func registerRebindingSteps(sc *godog.ScenarioContext, w *World) {
 	sc.Step(`^the physical key "([^"]*)" is mapped to "([^"]*)"$`, w.thePhysicalKeyXIsMappedToY)
 	sc.Step(`^I have changed multiple key mappings$`, w.iHaveAValidConfiguration)
 	sc.Step(`^I map the physical key "([^"]*)" to "([^"]*)"$`, w.iMapThePhysicalKeyXToY)
-	sc.Step(`^I restore its default mapping$`, w.iRestoreItsDefaultMapping)
+	sc.Step(`^I reset its mapping to default$`, w.iResetItsMappingToDefault)
 	sc.Step(`^I disable the physical key "([^"]*)"$`, w.iDisableThePhysicalKeyX)
 	sc.Step(`^I attempt to map a physical key to an unsupported key$`, w.iAttemptToMapAPhysicalKeyToAnUnsupportedKey)
 	sc.Step(`^I apply the selected profile$`, w.iApplyTheSelectedProfile)
@@ -110,13 +110,13 @@ func (w *World) iMapThePhysicalKeyXToY(key, name string) error {
 	return nil
 }
 
-func (w *World) iRestoreItsDefaultMapping() {
+func (w *World) iResetItsMappingToDefault() {
 	key := w.SelectedKey
 	w.Keyboard.Exchanges = append(w.Keyboard.Exchanges, keyboard.Exchange{
 		Write: coreBindPacket(client.BindingChange{Key: key, Action: client.Action{7, 0, byte(key)}}), Response: []byte{0x54, 0xe4, 8},
 	})
 	w.Err = w.Keyboard.Keyboard.WithKeyboard(context.Background(), w.Keyboard.Device.ID, func(k client.Keyboard) error {
-		return k.Restore(context.Background(), key)
+		return k.ResetToDefault(context.Background(), key)
 	})
 }
 

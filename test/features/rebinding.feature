@@ -13,9 +13,9 @@ Feature: Key rebinding
     Then pressing the physical key "A" should produce "B"
 
   @planned
-  Scenario: Restore a key mapping
+  Scenario: Reset a key mapping to default
     Given the physical key "A" is mapped to "B"
-    When I restore its default mapping
+    When I reset its mapping to default
     Then pressing the physical key "A" should produce "A"
 
   @planned
@@ -65,9 +65,9 @@ Feature: Key rebinding
       | F13    |
 
   @api
-  Scenario: Read back a restored key
+  Scenario: Read back a key reset to default
     Given the physical key "A" is mapped to "B"
-    When I restore its default mapping
+    When I reset its mapping to default
     Then the physical key "A" should read back "A"
 
   @api

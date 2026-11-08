@@ -212,10 +212,10 @@ func (s *keyboard) Disable(ctx context.Context, key KeyID) error {
 	return s.Bind(ctx, key, ActionDisabled())
 }
 
-// Restore removes a custom mapping by binding the key's factory default.
-func (s *keyboard) Restore(ctx context.Context, key KeyID) error {
+// ResetToDefault binds the key's factory-default action, not a previous custom mapping.
+func (s *keyboard) ResetToDefault(ctx context.Context, key KeyID) error {
 	if err := s.Bind(ctx, key, keydefs.PhysicalKeyToAction(byte(key))); err != nil {
-		return fmt.Errorf("restore key %s failed: %w", key, err)
+		return fmt.Errorf("reset key %s to default failed: %w", key, err)
 	}
 	return nil
 }

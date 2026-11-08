@@ -26,12 +26,12 @@ func registerAPIBindingSteps(sc *godog.ScenarioContext, w *World) {
 	sc.Step(`^the binding result should be "([^"]*)"$`, w.bindingResult)
 	sc.Step(`^the binding session should be closed$`, w.bindingSessionClosed)
 	sc.Step(`^a scripted keyboard for a binding round-trip$`, w.scriptedBindingRoundTrip)
-	sc.Step(`^I bind, read, and restore A through the public API$`, w.bindingRoundTrip)
+	sc.Step(`^I bind, read, and reset A to default through the public API$`, w.bindingRoundTrip)
 	sc.Step(`^a scripted action response of "([^"]*)"$`, w.scriptedActionResponse)
 	sc.Step(`^I read the scripted action through the public API$`, w.readScriptedAction)
 	sc.Step(`^the action presence should be "([^"]*)"$`, w.actionPresence)
 	sc.Step(`^a scripted default for modifier key "([^"]*)" at "([^"]*)" with action "([^"]*)"$`, w.scriptedModifierDefault)
-	sc.Step(`^I read and restore the modifier through the public API$`, w.readAndRestoreModifier)
+	sc.Step(`^I read and reset the modifier to default through the public API$`, w.readAndResetModifierToDefault)
 	sc.After(w.closeBindingFixture)
 }
 
@@ -143,18 +143,18 @@ func (w *World) scriptedModifierDefault(name, keyText, actionText string) error 
 		return err
 	}
 	w.ExpectedAction = action
-	restore := make([]byte, 33)
-	copy(restore, []byte{0x52, 0xfa, 3, 0x0c, 0, 0xaa, 9, 0x71, byte(key)})
-	copy(restore[9:], action[:])
+	reset := make([]byte, 33)
+	copy(reset, []byte{0x52, 0xfa, 3, 0x0c, 0, 0xaa, 9, 0x71, byte(key)})
+	copy(reset[9:], action[:])
 	w.Keyboard.Exchanges = []keyboard.Exchange{
 		{Write: coreActionPacket(key), Response: coreActionReply(key, client.Action{})},
-		{Write: restore, Response: []byte{0x54, 0xe4, 8}},
+		{Write: reset, Response: []byte{0x54, 0xe4, 8}},
 		{Write: coreActionPacket(key), Response: coreActionReply(key, action)},
 	}
 	return nil
 }
 
-func (w *World) readAndRestoreModifier() error {
+func (w *World) readAndResetModifierToDefault() error {
 	w.Err = w.Keyboard.Keyboard.WithKeyboard(context.Background(), w.Keyboard.Device.ID, func(k client.Keyboard) error {
 		ctx := context.Background()
 		binding, err := k.Binding(ctx, w.SelectedKey)
@@ -164,7 +164,7 @@ func (w *World) readAndRestoreModifier() error {
 		if binding.State != client.BindingDefault || binding.Action != (client.Action{}) || binding.Effective != w.ExpectedAction {
 			return fmt.Errorf("default modifier binding %+v, want effective %s", binding, w.ExpectedAction)
 		}
-		if err := k.Restore(ctx, w.SelectedKey); err != nil {
+		if err := k.ResetToDefault(ctx, w.SelectedKey); err != nil {
 			return err
 		}
 		binding, err = k.Binding(ctx, w.SelectedKey)
@@ -172,7 +172,7 @@ func (w *World) readAndRestoreModifier() error {
 			return err
 		}
 		if binding.State != client.BindingAction || binding.Action != w.ExpectedAction || binding.Effective != w.ExpectedAction {
-			return fmt.Errorf("restored modifier binding %+v, want %s", binding, w.ExpectedAction)
+			return fmt.Errorf("reset modifier binding %+v, want %s", binding, w.ExpectedAction)
 		}
 		return nil
 	})
@@ -295,11 +295,11 @@ func (w *World) scriptedBindingRoundTrip() error {
 	}
 	read := make([]byte, 33)
 	copy(read, []byte{0x52, 0x83, 0x04})
-	restore := make([]byte, 33)
-	copy(restore, []byte{0x52, 0xfa, 0x03, 0x0c, 0x00, 0xaa, 0x09, 0x71, 0x04, 0x07, 0x00, 0x04})
+	reset := make([]byte, 33)
+	copy(reset, []byte{0x52, 0xfa, 0x03, 0x0c, 0x00, 0xaa, 0x09, 0x71, 0x04, 0x07, 0x00, 0x04})
 	w.Keyboard.Exchanges = append(w.Keyboard.Exchanges,
 		keyboard.Exchange{Write: read, Response: []byte{0x54, 0x83, 0x04, 0x07, 0x00, 0x05}},
-		keyboard.Exchange{Write: restore, Response: []byte{0x54, 0xe4, 0x08}},
+		keyboard.Exchange{Write: reset, Response: []byte{0x54, 0xe4, 0x08}},
 		keyboard.Exchange{Write: read, Response: []byte{0x54, 0x83, 0x04, 0x07, 0x00, 0x04}},
 	)
 	return nil
@@ -324,7 +324,7 @@ func (w *World) bindingRoundTrip() error {
 		if !mapped || action != b {
 			return fmt.Errorf("binding read-back: got %s, want %s", action, b)
 		}
-		if err := s.Restore(ctx, key); err != nil {
+		if err := s.ResetToDefault(ctx, key); err != nil {
 			return err
 		}
 		binding, err = s.Binding(ctx, key)
@@ -334,7 +334,7 @@ func (w *World) bindingRoundTrip() error {
 		}
 		a := keydefs.ActionCode{7, 0, 4}
 		if !mapped || action != a {
-			return fmt.Errorf("restored read-back: got %s, want %s", action, a)
+			return fmt.Errorf("reset to default read-back: got %s, want %s", action, a)
 		}
 		return nil
 	})
